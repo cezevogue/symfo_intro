@@ -1,0 +1,162 @@
+{# Le template hérite du template base.html.twig à la racine de templates #}
+{% extends 'base.html.twig' %}
+
+{# surcharge du bloc title en récupérant le contenu présent dans base.html.twig #}
+{% block title %}{{ parent() }} - Twig{% endblock %}
+
+{# surcharge totale sans récupération de contenu du block body de base.html.twig #}
+{% block body %}
+    {# Création d'une variable avec set #}
+    {% set test= "une variable test" %}
+
+    <p>{{ test }}</p>
+
+    {# concaténation avec le tilde #}
+
+    <p>{{ test ~ ' !' }}</p>
+
+    {# structure conditionnelle #}
+    {% if test != '' %}
+        <p>test n'est pas vide</p>
+    {% else %}
+        <p>test est vide</p>
+    {% endif %}
+
+    {% set vrai= true %}
+    {% set faux= false %}
+
+    {# not  pour !$faux #}
+    {% if not faux %}
+        <p>faux n'est pas vrai</p>
+    {% endif %}
+
+    {# and or  pour  &&  || #}
+    {% if vrai and not faux %}
+        <p>vrai est vrai et faux n'est pas vrai</p>
+    {% endif %}
+
+    {# BOUCLES #}
+
+    {# un tableau indexé #}
+    {% set tableau=['a', 'b', 'c', 'd'] %}
+
+    {# pour accéder à un élément du tableau #}
+    {{ tableau[2] }}
+    {# ou #}
+    {{ tableau.2 }}
+
+    {# pour boucler #}
+    {% for lettre in tableau %}
+        {{ lettre }}<br>
+    {% endfor %}
+
+    {% set assoc= {nom: 'Groucho', prenom:'Marc', profession: 'explorateur'} %}
+
+
+    {# pour accéder à un élément du tableau #}
+    {{ assoc['prenom'] }}
+    {# ou #}
+    {{ assoc.nom }}
+
+    {# foreach($item as $key =>$value) #}
+    {% for key, value in assoc %}
+        {{ key }} : {{ value }}<br>
+    {% endfor %}
+
+    {% set vide=[] %}
+
+    {#  on entre dans le else si le tableau est vide #}
+    {% for item in vide %}
+        {{ item }}
+    {% else %}
+        <p>vide</p>
+    {% endfor %}
+
+    {# loop est accessible dans toutes les boucles et donne l'information de l'état de la boucle #}
+    {% for value in assoc %}
+        <p>tour n°: {{ loop.index }}</p>
+        {% if loop.first %}
+            <p>premier tour de boucle</p>
+        {% endif %}
+
+        {% if loop.last %}
+            <p>Dernier tour de boucle</p>
+        {% endif %}
+        {{ value }}<br>
+    {% endfor %}
+
+    {#  declare un tableau qui contient les chiffres de 0 à 9 #}
+    {%  set chiffres = 0..9 %}
+
+    {% for chiffre in chiffres %}
+        {{ chiffre }}<br>
+    {% endfor %}
+
+    {# for($i=0; $i<10; $i++) #}
+    {% for i in 0..9 %}
+        {{ i }}<br>
+    {% endfor %}
+
+    {# if(isset($test)) #}
+    {% if test is defined %}
+        <p>la variable test existe </p>
+    {% endif %}
+
+    {# if(!empty($test)) #}
+    {% if test is not empty %}
+        <p>test n'est pas vide</p>
+    {% endif %}
+
+    {% set dix=10 %}
+
+    {% if dix is divisible by(5) %}
+        <p>dix est divisible par 5</p>
+    {% endif %}
+
+    {% if dix is odd %}
+        <p>dix est impair</p>
+    {% endif %}
+
+    {% if dix is even %}
+        <p>dix est pair</p>
+    {% endif %}
+
+
+    {# les filtres avec PIPE | #}
+    {# strtouppper($test) #}
+    <p>{{ test | upper }}</p>
+    <p>{{ test | lower }}</p>
+
+    {# definir une valeur par defaut #}
+    <p>{{ var | default('var n\'existe pas') | upper }}</p>
+
+    {# formatage de date #}
+    <p>{{ '2021-11-30'| date('d/m/Y') }}</p>
+
+    {#  formatage à partir d'un objet datetime  #}
+    <p>{{ demain | date('d/m/Y H:i:s') }}</p>
+        {# ou #}
+    <p>{{ demain.format('d/m/Y H:i:s') }}</p>
+
+    {% set paragraphe='<p>je suis un paragraphe</p>' %}
+
+    {{ paragraphe }}
+    {# permet d'interpréter les balises html #}
+    {{ paragraphe | raw }}
+
+{#    #}{# inclus le fichier coucou.html.twig #}
+{#    {% include 'index/coucou.html.twig' %}#}
+{#    #}{# sans acces aux variables de index dans coucou #}
+{#    {% include 'index/coucou.html.twig' only %}#}
+{#    #}{# avec la variable demain accessible par l'appel de var dans coucou   #}
+{#    {% include 'index/coucou.html.twig' with { demain: demain} only %}#}
+
+    {# equivalent du var_dump() #}
+    {{ dump(test) }}
+
+
+
+
+
+
+{% endblock %}
